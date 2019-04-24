@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <link rel="stylesheet" href="estilo.css">
+ 
+
+</head>
+
+<body>
+
+  <h1 class="">
+    Teste de conhecimento Javascript
+  </h1>
+
+  <div id="number"></div>
+
+  <div class="container">
+    <div class="custom-control custom-radio">
+      <input type="radio" name="input" id="a" class="custom-control-input" value="0">
+      <label class="custom-control-label" for="a" id="label"></label>
+    </div>
+
+    <div class="custom-control custom-radio">
+      <input type="radio" name="input" id="b" class="custom-control-input" value="0">
+      <label class="custom-control-label" for="b"></label>
+    </div>
+
+    <div class="custom-control custom-radio">
+      <input type="radio" name="input" id="c" class="custom-control-input" value="1">
+      <label class="custom-control-label" for="c"></label>
+    </div>
+
+    <div class="custom-control custom-radio">
+      <input type="radio" name="input" id="d" class="custom-control-input" value="0">
+      <label class="custom-control-label" for="d"></label>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg btn-block" id="btn">SUBMETER</button>
+
+  </div>
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+
+<script>
+
+  var nome_jogador = prompt("informa seu nome de Jogador");      
+  
+  // Algumas configurações necessárias do firebase, 
+  // Criando um objeto referenciando os endereço, nomes e etc. 
+
+
+  var config = {
+    apiKey: "AIzaSyBbnwoC6QJXta_zSjzrbYpX9b9dwU1hves",
+    authDomain: "landing-publisher.firebaseapp.com",
+    databaseURL: "https://landing-publisher.firebaseio.com",
+    projectId: "landing-publisher",
+    storageBucket: "landing-publisher.appspot.com",
+    messagingSenderId: "812083925829"
+  };
+
+  // Startando o projeto FIREBASE 
+  firebase.initializeApp(config);
+  
+  //
+  // Criação de algumas variáveis 
+  // Sendo que mensagensREF aponta para um objeto criado na Nuvem 
+  //
+  
+  var mensagens = []
+  var database = firebase.database()
+  var mensagensRef = database.ref('Dados')
+  
+  //
+  // Função que insere os valores no Banco Firebase 
+  // Seria o equivalente a uma operação insert em um banco de dados relacional
+  //
+  
+  function salvar(valores,nome) {
+    var novaMensagem = mensagensRef.push();
+    novaMensagem.set({  
+      valores: valores,
+      nome:nome
+    })
+  }
+  
+  
+  // **** Configurações de algumas variáveis, para inicio do projeto ****  // 
+
+//  
+// @label               Corresponde a tag label do <html> onde irei fazer a rederização de conteúdo 
+// @btn                 Corresponde a tag button do <html> onde irei atrelar o evento do click do mouse do usuário  
+// @contador            Usado para fazer o controle do meu conteudo escrito e estruturado no array objeto 
+// @respostas           Usadado para fazer o acumulador de respostas do usuário 
+// @contador_gabarito   Corresponde ao número de acerto do usuário
+// @gabarito            São as respostas corretas de cada etapa do game
+//
+ 
+var table               = document.getElementsByTagName('td');
+var label               = document.getElementsByTagName('label');
+var btn                 = document.getElementById('btn');
+var contador            = 0;
+var respostas           = [];
+var contador_gabarito   = 0;
+var gabarito = ["c","a","b","a","a","a","a","d","b","b"];
+
+
+//
+// Função que gera os segundos na tela 
+// Onde N, corresponde o tempo em segundos
+//
+
+var n = 0;
+var l = document.getElementById("number");
+window.setInterval(function () {
+    l.innerHTML = n;
+    n++;
+    if (n == 50) {
+        alert('Acabou o tempo!'); 
+        window.location.assign("ranking.html") 
+    }
+}, 1000);
+
+//
+// Construção do objeto responsável por gerar conteúdo das perguntas 
+// Sendo que a lógica é uma metrix =)
+//
+
+var objeto = [
+    [
+        "JavaScript é uma linguagem de marcação",
+        "Javascript é derivado do Java",
+        "JavaScript possui suporte para Orientação a objetos",
+        "JavaScript é uma linguagem somente para front"
+    ],
+    [
+        "A equação 0.99999999999 == 1 é True",
+        "um jeito de debugar seu código JS é usando o print",
+        "JavaScript é uma linguagem compilada",
+        "Node é uma linguagem baseada no Javascript"
+    ],
+    [
+        "A função alert é ideal para debugar códigos",
+        "Santos é melhor que o Corinthians",
+        "A culpa é do usuário",
+        "No meu computador funciona"
+    ],
+    [
+        "Ta pronto, só falta testar",
+        "Ou é rápido, ou é bem feito. Os 2, não dá",
+        "Não faço gambiarra, somente arranjos técnicos",
+        "Eu fiz certo, mas não compila"
+    ],
+    [
+        " É possível manipular estilos usando javascript",
+        " Node é uma linguagem de programação baseado em Javascript",
+        " Node.js tem um motor typescript",
+        " Java foi inspirado na linguagem javascript "
+    ],
+
+    [ 
+        " DOM é uma arvore de objetos de uma pagina WEB",
+        " ECMASCRIPT é uma linguagem de programação",
+        " Existe suporte nativo para comunicação com BD relacionais",
+        " É uma linguagem de baixo nível "
+    ],
+
+    [
+        " Neppo é a melhor empresa de T.I",
+        " Javascript tem suporte POC - Programação Orientado a Cebola - Se mexer chora - ",
+        " Node.js tem um motor typescript",
+        " Java foi inspirado na linguagem javascript "
+    ],
+   
+    [
+        " Naruto é melhor que DBZ",
+        " Lol é melhor que Dota",
+        " É biscoito e não bolacha",
+        " Não existe melhor ou pior, e sim preferências "
+    ],
+
+     [
+        " Babel é uma liguagem de programação baseada no Javascript",
+        " Babel é um transpiler ",
+        " Babel é um framework do Node.js",
+        " Babel é uma lib usada para auxiliar no desenvolvimento  "
+    ], 
+
+    [
+        " Isso é uma função () => {} ",
+        " Isso é uma função anonima () => {}",
+        " declaração de uma variável global é com a sintaxe: let nome ",
+        " Para declaração de uma função se faz necessário chamar o método function() "
+    ]
+
+]
+
+//Esse laço, corresponde as primeiras questões que estão na tela
+//Onde eu defino o conteúdo modificando o innerHTML com meu objeto acima   
+for (var i = 0; i <= 3; + i++) {
+    label[i].innerHTML = objeto[0][i];
+}
+
+//
+// É uma função que dispara quando o usuário clica no <button>, e aciona o evento click
+// Ela é responsável pelo motor da aplicação:
+// 1.1 Gera o conteúdo das perguntas
+// 1.2 Contabiliza o número de acertos do Jogador 
+// 1.3 Insere a quantidade de acertos no banco firebase, atráves da função Salvar 
+// 1.4 Recarrega o jogo assim que os dados forem inseridos 
+// 
+
+function clicar() {
+    var pacote = document.querySelectorAll('[name=input]:checked');
+    var valor_pacote = pacote[0].id;
+    respostas.push(valor_pacote);
+    if (gabarito[contador] == respostas[contador]) {
+        contador_gabarito += 1;
+    }
+    contador += 1;
+    if(contador == 10){
+      alert('Você acertou: '+ contador_gabarito); 
+      salvar(contador_gabarito,nome_jogador);
+      window.location.assign("ranking.html") 
+    }
+    for (var i = 0; i <= 3; + i++) {
+        label[i].innerHTML = objeto[contador][i];
+    } 
+}
+
+//
+// Setando o <button> da aplicação, e chamando ele quando o jogador clicar
+//
+
+var btn = document.getElementById('btn')
+btn.addEventListener("click", clicar);
+
+</script>
+
+</html>

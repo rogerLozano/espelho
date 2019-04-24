@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+</head>
+
+<body>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-1">
+            </div>
+        </div>
+
+        <h1 class="animated bounce infinite">Histórico Geral</h1>
+        <p>Resultado do Histórico geral do Neppo Gamming</p>
+
+        <div class="lds-dual-ring" id="ld"></div>
+
+        <table class="animated bounceIn table table-bordered table-dark" id="tabela">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Pontuação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+
+    <footer class="animated bounceIn page-footer font-small blue" id="footer">
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2019 Copyright - Neppo Tecnologia
+        </div>
+        <!-- Copyright -->
+        <p>
+            Rogério- Jefferson - Karina
+        </p>
+        <p>
+            Desafio Gamificação, seu aprendizado é nossa recompensa =)
+        </p>
+    </footer>
+
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+
+<script>
+    //
+    // Configurações da API do firebase, algumas configurações iniciais
+    // Passando algumas informações necessárias 
+    //
+    var config = {
+        apiKey: "AIzaSyBbnwoC6QJXta_zSjzrbYpX9b9dwU1hves",
+        authDomain: "landing-publisher.firebaseapp.com",
+        databaseURL: "https://landing-publisher.firebaseio.com",
+        projectId: "landing-publisher",
+        storageBucket: "landing-publisher.appspot.com",
+        messagingSenderId: "812083925829"
+    };
+
+    // Startando o projeto FIREBASE 
+    firebase.initializeApp(config);
+
+    //
+    // Criação de algumas variáveis 
+    // Sendo que mensagensREF aponta para um objeto criado na Nuvem 
+    //
+    var database = firebase.database()
+    var mensagensRef = database.ref('Dados')
+    var mensagens = []
+    var td = document.getElementsByTagName('td');
+
+    //
+    // Função que que pega os objetos que estão no FIREBASE 
+    // e atribuindo esse valores a um array, chamado mensagens 
+    //
+    mensagensRef.on('value', snapshot => {
+        let data = Object.values(snapshot.val())
+        mensagens = data
+    })
+  
+   // 
+   // Função que renderiza o conteúdo vindo do banco para o HTML 
+   // Fazendo a manipulação por DOM, colocando os valores no HTML 
+   //
+    setTimeout(function () {
+        for (m of mensagens) {
+            td[1].innerHTML = mensagens[0].valores;
+          //  td[3].innerHTML = mensagens[1].valores;
+          //  td[5].innerHTML = mensagens[2].valores;
+          //  td[7].innerHTML = mensagens[3].valores
+          //  td[9].innerHTML = mensagens[4].valores
+            td[0].innerHTML = mensagens[0].nome;
+          //  td[2].innerHTML = mensagens[1].nome;
+          //  td[4].innerHTML = mensagens[2].nome;
+          //  td[6].innerHTML = mensagens[3].nome;
+          //  td[8].innerHTML = mensagens[4].nome;
+        }
+    }, 3000)
+
+    //
+    // Setando alguns elementos do HTML, para algumas modifiações Javascript 
+    //
+    var tabela = document.getElementById('tabela')
+    var ld = document.getElementById('ld');
+    var footer = document.getElementById('footer');
+
+    //
+    // Escondendo os elementos por Estilo
+    //
+    tabela.style.display = "none";
+    footer.style.display = "none"
+
+    //
+    //Função que apaga o loader quando necessário (após 3 segundos) 
+    //
+    function apagar() {
+        ld.style.display = "none";
+    }
+
+    // 
+    // Função que motoriza a entrada e saída do Loader e Tabela 
+    //
+    var n = 0;
+    window.setInterval(function () {
+        n++;
+        if (n == 3) {
+            tabela.style.display = "";
+            footer.style.display = ""
+            apagar();
+        }
+    }, 1000);
+
+</script>
+
+<style>
+    #ld {
+        margin-left: 48%;
+    }
+
+    h1 {
+        text-align: center;
+    }
+    p {
+        text-align: center;
+    }
+    .container {
+        padding: 2%;
+    }
+    footer {
+        background-color: blue;
+        height: 250px;
+        color: white;
+    }
+
+    lds-dual-ring {
+        width: 64px;
+        height: 64px;
+    }
+
+    .lds-dual-ring:after {
+
+        content: " ";
+        display: block;
+        width: 46px;
+        height: 46px;
+        margin: 1px;
+        border-radius: 50%;
+        border: 5px solid blueviolet;
+        border-color: blueviolet transparent #fdd transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+    }
+
+    @keyframes lds-dual-ring {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+</html>
